@@ -32,8 +32,8 @@ Each folder includes:
 Clone the project:
 
 ```bash
-!git clone https://github.com/Thien-lee-44/BTL_ML251.git
-%cd BTL_ML251/BTLx
+git clone https://github.com/Thien-lee-44/BTL_ML251.git
+cd BTL_ML251/BTLx
 ```
 
 where x is 1, 2 or 3
