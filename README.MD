@@ -44,19 +44,19 @@ Then run the collab file located in ```./notebook```, the collab file is set up 
 
 ### BTL1:
 
-dataset chosen is over 10k entries of various car models' features, used to predict car prices.
+Dataset chosen is over 10k entries of various car models' features, used to predict car prices.
 
 The dataset is publicly available at [this kaggle link](https://www.kaggle.com/datasets/CooperUnion/cardataset/data).
 
 ### BTL2:
 
-dataset chosen is over 10k poems obtained from Poetry Foundation website. Evenly split between 5 catgories:
+Dataset includes 10k poems, spread across 5 topics:
 
-+ Tự nhiên
-+ Mĩ thuật và Khoa học
-+ Tình cảm
-+ Các mối quan hệ
-+ Tôn giáo
++ Nature
++ Art & Sciences
++ Love
++ Relationships
++ Religion
 
 The dataset is publicly available at [this kaggle link](https://www.kaggle.com/datasets/djdonpablo/poem-classification-dataset).
 
