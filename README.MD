@@ -61,4 +61,23 @@ Dataset includes 10k poems, spread across 5 topics:
 The dataset is publicly available at [this kaggle link](https://www.kaggle.com/datasets/djdonpablo/poem-classification-dataset).
 
 
+### BTL3:
+
+Dataset includes 6862 weather images, Including 11 types:
+
++ dew
++ fogsmog
++ frost
++ glaze
++ hail
++ lightning
++ rain
++ rainbow
++ rime
++ sandstorm
++ snow
+
+This dataset is available at [this kaggle link](https://www.kaggle.com/datasets/jehanbhathena/weather-dataset).
+
+
 
