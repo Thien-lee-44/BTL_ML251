@@ -1,4 +1,4 @@
-# BTL2 môn Học Máy, mã môn học CO3117 - Học máy với dữ liệu bảng
+# BTL2 môn Học Máy, mã môn học CO3117 - Học máy với dữ liệu text
 ## *Group info*
 
 + **Semester** : 1
