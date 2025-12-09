@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Báo cáo BTL3 - Nhóm MLP2</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body { background-color: #f8f9fa; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #333; }
+        
+        /* HEADER */
+        .report-header {
+            background: linear-gradient(135deg, #0288d1 0%, #00acc1 100%);
+            color: white; padding: 4rem 0; margin-bottom: 3rem;
+            box-shadow: 0 4px 15px rgba(0, 150, 136, 0.2);
+        }
+        
+        /* SECTIONS */
+        .section-title {
+            border-left: 5px solid #0288d1; padding-left: 15px; margin: 60px 0 30px 0;
+            font-weight: 800; color: #01579b; text-transform: uppercase; letter-spacing: 0.5px;
+        }
+        .sub-title {
+            font-weight: 700; color: #455a64; margin-top: 30px; margin-bottom: 15px;
+            border-bottom: 2px solid #cfd8dc; padding-bottom: 5px; display: inline-block;
+        }
+
+        /* CARDS */
+        .custom-card {
+            border: none; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            transition: all 0.3s ease; height: 100%; background: #fff;
+        }
+        .custom-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.08); }
+
+        /* CHART FRAMES */
+        .chart-frame {
+            border: 1px solid #dee2e6; border-radius: 8px; background-color: #fff;
+            width: 100%; display: flex; align-items: center; justify-content: center;
+            overflow: hidden; padding: 5px; position: relative;
+        }
+        .chart-frame img { width: 100%; height: 100%; object-fit: contain; }
+        .h-sm { height: 180px; }
+        .h-md { height: 350px; }
+        .h-lg { height: 500px; }
+
+        /* TABLE STYLES */
+        .table-custom thead { background-color: #37474f; color: white; }
+        .best-val { background-color: #e0f2f1 !important; color: #00695c; font-weight: bold; }
+        
+        /* BADGES */
+        .badge-weather { font-size: 0.8rem; margin-bottom: 5px; display: inline-block; }
+        .badge-tech { background-color: #e3f2fd; color: #0277bd; padding: 4px 8px; border-radius: 4px; font-family: monospace; font-size: 0.9em; }
+    </style>
+</head>
+<body>
+
+    <header class="report-header text-center">
+        <div class="container">
+            <h1 class="display-4 fw-bold mb-3">BÁO CÁO HỌC MÁY (BTL3)</h1>
+            <p class="fs-4 opacity-90 mb-4">Phân Loại Hình Ảnh: Chủ Đề Thời Tiết</p>
+            <div class="d-flex justify-content-center gap-3">
+                <span class="badge bg-white text-primary px-3 py-2 rounded-pill shadow-sm"><i class="fas fa-users me-2"></i>Nhóm MLP2</span>
+                <span class="badge bg-warning text-dark px-3 py-2 rounded-pill shadow-sm"><i class="fas fa-trophy me-2"></i>Best: DINOv2 + LR (91%)</span>
+            </div>
+        </div>
+    </header>
+
+    <div class="container pb-5" style="margin-top: -3rem;">
+
+        <div class="row mb-5">
+            <div class="col-12">
+                <div class="custom-card card p-4 shadow-lg">
+                    <h2 class="section-title mt-0"><i class="fas fa-database me-2"></i>1. Tổng Quan Bộ Dữ Liệu</h2>
+                    <div class="row">
+                        <div class="col-md-5">
+                            <div class="alert alert-info border-0 h-100">
+                                <h5 class="fw-bold"><i class="fas fa-info-circle me-2"></i>Thông tin chung</h5>
+                                <ul class="mb-3">
+                                    <li><strong>Nguồn dữ liệu:</strong> Kaggle / Harvard Dataverse (Weather Dataset).</li>
+                                    <li><strong>Tổng số ảnh:</strong> 6,862 ảnh màu (RGB).</li>
+                                    <li><strong>Bài toán:</strong> Phân loại đa lớp (Multi-class Classification) với 11 nhãn.</li>
+                                    <li><strong>Thách thức:</strong> Các lớp có sự tương đồng lớn về thị giác (ví dụ: Sương mù vs Khói bụi, Mưa vs Tuyết).</li>
+                                </ul>
+                                <p class="mb-2 fw-bold text-secondary">Danh sách 11 nhãn:</p>
+                                <div>
+                                    <span class="badge bg-secondary badge-weather">Dew</span>
+                                    <span class="badge bg-secondary badge-weather">Fog/Smog</span>
+                                    <span class="badge bg-info text-dark badge-weather">Frost</span>
+                                    <span class="badge bg-info text-dark badge-weather">Glaze</span>
+                                    <span class="badge bg-dark badge-weather">Hail</span>
+                                    <span class="badge bg-warning text-dark badge-weather">Lightning</span>
+                                    <span class="badge bg-primary badge-weather">Rain</span>
+                                    <span class="badge bg-success badge-weather">Rainbow</span>
+                                    <span class="badge bg-light text-dark border badge-weather">Rime</span>
+                                    <span class="badge bg-danger badge-weather">Sandstorm</span>
+                                    <span class="badge bg-light text-dark border badge-weather">Snow</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-7">
+                            <h6 class="fw-bold text-center text-primary">Phân Phối Số Lượng Ảnh (Label Distribution)</h6>
+                            <div class="chart-frame h-md">
+                                <img src="phanphoi.png" alt="Phân phối nhãn" onerror="this.parentElement.innerHTML='<div class=\'text-center text-muted\'><i class=\'fas fa-chart-bar fa-3x mb-2\'></i><br>Thiếu ảnh: phanphoi.png</div>'">
+                            </div>
+                            <p class="text-center small text-muted mt-2">Biểu đồ thể hiện mức độ cân bằng dữ liệu giữa các lớp thời tiết.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="section-title"><i class="fas fa-cogs me-2"></i>2. Phương Pháp & Mô Hình Trích Xuất</h2>
+        <p class="text-muted mb-4">
+            Nhóm áp dụng kỹ thuật <strong>Transfer Learning (Feature Extraction)</strong>: Thay vì huấn luyện mô hình từ đầu (tốn kém tài nguyên), nhóm sử dụng các mô hình SOTA (State-of-the-Art) đã được huấn luyện trên tập dữ liệu lớn (như ImageNet, LAION) để trích xuất vector đặc trưng, sau đó huấn luyện bộ phân loại nhẹ (Classifier) ở lớp cuối cùng.
+        </p>
+        
+        <div class="row mb-5">
+            <div class="col-12">
+                <div class="custom-card card p-0 overflow-hidden">
+                    <div class="card-header bg-dark text-white fw-bold py-3">
+                        <i class="fas fa-microchip me-2"></i>Chi Tiết Các Bộ Trích Xuất Đặc Trưng (Feature Extractors)
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover mb-0 align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th style="width: 20%;">Mô hình</th>
+                                    <th style="width: 15%;">Kiến trúc</th>
+                                    <th style="width: 15%;">Vector Output</th>
+                                    <th style="width: 50%;">Mô tả & Lý do lựa chọn</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="fw-bold text-primary">EfficientNet</td>
+                                    <td><span class="badge-tech">CNN</span></td>
+                                    <td class="text-center">1,536</td>
+                                    <td>Dựa trên mạng nơ-ron tích chập (CNN). Đây là <strong>Baseline</strong> đại diện cho phương pháp thị giác máy tính truyền thống, tối ưu hóa sự cân bằng giữa độ sâu, độ rộng và độ phân giải.</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold text-success">DINOv2</td>
+                                    <td><span class="badge-tech">Self-supervised ViT</span></td>
+                                    <td class="text-center">384</td>
+                                    <td>Vision Transformer được huấn luyện <strong>tự giám sát</strong> (không cần nhãn) của Meta. Mô hình này học được các đặc trưng ngữ nghĩa mạnh mẽ (như hình dáng vật thể, bố cục) tốt hơn các phương pháp giám sát thông thường.</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold text-info">Swin Transformer</td>
+                                    <td><span class="badge-tech">Hierarchical ViT</span></td>
+                                    <td class="text-center">768</td>
+                                    <td>Transformer phân cấp với cơ chế cửa sổ trượt (Shifted Windows). Khắc phục hạn chế của ViT gốc, giúp mô hình hiểu tốt cả chi tiết cục bộ (như hạt mưa) và cấu trúc toàn cục (bầu trời).</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold text-danger">DeiT</td>
+                                    <td><span class="badge-tech">Distilled ViT</span></td>
+                                    <td class="text-center">384</td>
+                                    <td>ViT tối ưu hóa dữ liệu nhờ kỹ thuật <strong>chưng cất tri thức</strong> (Knowledge Distillation) từ một mạng giáo viên CNN. Được chọn để so sánh hiệu quả của ViT "nhẹ" trên tập dữ liệu vừa phải.</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold text-secondary">CLIP</td>
+                                    <td><span class="badge-tech">Multimodal</span></td>
+                                    <td class="text-center">512</td>
+                                    <td>Mô hình học đa phương thức (Ảnh - Văn bản). Rất mạnh trong việc nhận diện các khái niệm trừu tượng (như "Bão cát", "Sương mù") nhờ được học từ ngữ nghĩa ngôn ngữ tự nhiên.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="section-title"><i class="fas fa-chart-pie me-2"></i>3. Phân Tích Khám Phá Dữ Liệu (EDA)</h2>
+        
+        <h5 class="sub-title">A. Đặc Trưng Màu Sắc Trung Bình (Mean Color Distribution)</h5>
+        <p class="text-muted mb-3">Biểu đồ Histogram màu sắc (RGB) trung bình của từng lớp giúp nhận diện đặc trưng thị giác. Ví dụ: <em>Sandstorm</em> sẽ lệch về kênh Đỏ/Lục (tạo màu vàng cam), trong khi <em>Snow</em> sẽ có giá trị cao ở cả 3 kênh (màu trắng).</p>
+        
+        <div class="row g-2 mb-4">
+            <div class="col-md-2 col-4"><div class="custom-card card p-1"><div class="chart-frame h-sm"><img src="color_dist_dew.png" onerror="this.src='https://via.placeholder.com/150?text=No+Image'"></div><p class="text-center small mb-0 fw-bold">Dew</p></div></div>
+            <div class="col-md-2 col-4"><div class="custom-card card p-1"><div class="chart-frame h-sm"><img src="color_dist_fog.png" onerror="this.src='https://via.placeholder.com/150?text=No+Image'"></div><p class="text-center small mb-0 fw-bold">Fog</p></div></div>
+            <div class="col-md-2 col-4"><div class="custom-card card p-1"><div class="chart-frame h-sm"><img src="color_dist_frost.png" onerror="this.src='https://via.placeholder.com/150?text=No+Image'"></div><p class="text-center small mb-0 fw-bold">Frost</p></div></div>
+            <div class="col-md-2 col-4"><div class="custom-card card p-1"><div class="chart-frame h-sm"><img src="color_dist_glaze.png" onerror="this.src='https://via.placeholder.com/150?text=No+Image'"></div><p class="text-center small mb-0 fw-bold">Glaze</p></div></div>
+            <div class="col-md-2 col-4"><div class="custom-card card p-1"><div class="chart-frame h-sm"><img src="color_dist_hail.png" onerror="this.src='https://via.placeholder.com/150?text=No+Image'"></div><p class="text-center small mb-0 fw-bold">Hail</p></div></div>
+            <div class="col-md-2 col-4"><div class="custom-card card p-1"><div class="chart-frame h-sm"><img src="color_dist_lightning.png" onerror="this.src='https://via.placeholder.com/150?text=No+Image'"></div><p class="text-center small mb-0 fw-bold">Lightning</p></div></div>
+            <div class="col-md-2 col-4"><div class="custom-card card p-1"><div class="chart-frame h-sm"><img src="color_dist_rain.png" onerror="this.src='https://via.placeholder.com/150?text=No+Image'"></div><p class="text-center small mb-0 fw-bold">Rain</p></div></div>
+            <div class="col-md-2 col-4"><div class="custom-card card p-1"><div class="chart-frame h-sm"><img src="color_dist_rainbow.png" onerror="this.src='https://via.placeholder.com/150?text=No+Image'"></div><p class="text-center small mb-0 fw-bold">Rainbow</p></div></div>
+            <div class="col-md-2 col-4"><div class="custom-card card p-1"><div class="chart-frame h-sm"><img src="color_dist_rime.png" onerror="this.src='https://via.placeholder.com/150?text=No+Image'"></div><p class="text-center small mb-0 fw-bold">Rime</p></div></div>
+            <div class="col-md-2 col-4"><div class="custom-card card p-1"><div class="chart-frame h-sm"><img src="color_dist_sandstorm.png" onerror="this.src='https://via.placeholder.com/150?text=No+Image'"></div><p class="text-center small mb-0 fw-bold">Sandstorm</p></div></div>
+            <div class="col-md-2 col-4"><div class="custom-card card p-1"><div class="chart-frame h-sm"><img src="color_dist_snow.png" onerror="this.src='https://via.placeholder.com/150?text=No+Image'"></div><p class="text-center small mb-0 fw-bold">Snow</p></div></div>
+            <div class="col-md-2 col-4"><div class="custom-card card p-1 d-flex align-items-center justify-content-center bg-light text-muted small"><em>(Đang cập nhật)</em></div></div>
+        </div>
+
+        <h5 class="sub-title">B. Phân Tích Độ Phân Giải Ảnh (Image Resolution)</h5>
+        <div class="row mb-5">
+            <div class="col-lg-8 offset-lg-2">
+                <div class="custom-card card p-3">
+                    <div class="chart-frame h-md" style="border: none;">
+                        <img src="image_resolution.png" onerror="this.parentElement.innerHTML='<div class=\'text-center text-danger py-5\'>Thiếu ảnh: image_resolution.png</div>'">
+                    </div>
+                    <p class="text-center small text-muted mt-2">Phân bố kích thước ảnh giúp xác định chiến lược Resize/Crop khi tiền xử lý.</p>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="section-title"><i class="fas fa-chart-line me-2"></i>4. Kết Quả Thực Nghiệm & Đánh Giá</h2>
+        
+        <h5 class="sub-title">A. Bảng So Sánh Độ Chính Xác (Accuracy)</h5>
+        <div class="row">
+            <div class="col-12">
+                <div class="table-responsive">
+                    <table class="table table-custom table-hover table-striped text-center align-middle">
+                        <thead>
+                            <tr>
+                                <th>Bộ Trích Xuất</th>
+                                <th>SVM</th>
+                                <th>Hồi quy Logistic</th>
+                                <th>Random Forest (n=50)</th>
+                                <th>Random Forest (n=100)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="fw-bold text-start ps-4">EfficientNet (CNN)</td>
+                                <td>0.83</td> <td>0.84</td> <td>0.74</td> <td>0.76</td>
+                            </tr>
+                            <tr class="best-val">
+                                <td class="fw-bold text-start ps-4"><i class="fas fa-crown me-2"></i>DINOv2 (ViT)</td>
+                                <td>0.87</td> <td class="text-decoration-underline">0.91 (BEST)</td> <td>0.87</td> <td>0.88</td>
+                            </tr>
+                            <tr>
+                                <td class="fw-bold text-start ps-4">Swin Transformer</td>
+                                <td>0.88</td> <td class="fw-bold text-primary">0.90</td> <td>0.80</td> <td>0.82</td>
+                            </tr>
+                            <tr>
+                                <td class="fw-bold text-start ps-4">DeiT (ViT)</td>
+                                <td>0.82</td> <td>0.84</td> <td>0.76</td> <td>0.79</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-4 g-4">
+            <div class="col-md-7">
+                <div class="custom-card card p-3">
+                    <h5 class="text-center fw-bold text-secondary mb-3">Biểu Đồ So Sánh Hiệu Năng Chi Tiết</h5>
+                    <div class="chart-frame h-lg">
+                        <img src="btl3_grouped_chart.png" onerror="this.parentElement.innerHTML='<div class=\'text-danger text-center\'>Thiếu ảnh: btl3_grouped_chart.png</div>'">
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-5">
+                <div class="custom-card card p-3">
+                    <h5 class="text-center fw-bold text-success mb-3">Confusion Matrix (CLIP Model)</h5>
+                    <div class="chart-frame h-lg">
+                        <img src="btl3_cm_clip.png" onerror="this.parentElement.innerHTML='<div class=\'text-danger text-center\'>Thiếu ảnh: btl3_cm_clip.png</div>'">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h5 class="sub-title mt-5">B. Phân Tích Chuyên Sâu & Ghi Chú</h5>
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="alert alert-light border-start border-4 border-success shadow-sm h-100">
+                    <h6 class="fw-bold text-success"><i class="fas fa-check-circle me-2"></i>Tại sao Transformer > CNN?</h6>
+                    <p class="small text-muted mb-0">
+                        Các đặc trưng dựa trên Transformer (DINOv2, Swin) vượt trội hơn CNN truyền thống (EfficientNet) khoảng <strong>6-7%</strong>. 
+                        Nguyên nhân là do cơ chế <strong>Self-Attention</strong> giúp mô hình nắm bắt tốt các đặc trưng toàn cục (như bầu trời, ánh sáng, mật độ mây) - yếu tố quan trọng để phân biệt thời tiết, trong khi CNN tập trung nhiều vào các chi tiết cục bộ (cạnh, góc).
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="alert alert-light border-start border-4 border-primary shadow-sm h-100">
+                    <h6 class="fw-bold text-primary"><i class="fas fa-balance-scale me-2"></i>Tại sao Logistic Regression hiệu quả nhất?</h6>
+                    <p class="small text-muted mb-0">
+                        SVM và Hồi quy Logistic hoạt động hiệu quả hơn hẳn Random Forest trên các vector đặc trưng này (LR đạt 0.91 vs RF đạt 0.88). 
+                        Điều này gợi ý rằng không gian đặc trưng (Feature Space) tạo bởi các mô hình Deep Learning tiên tiến (DINOv2) đã <strong>phân tách tuyến tính (Linearly Separable) khá tốt</strong>, khiến các mô hình tuyến tính đơn giản lại đạt hiệu quả cao nhất mà không bị quá khớp (overfitting).
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="alert alert-warning border-0 shadow-sm">
+                    <h6 class="fw-bold text-dark"><i class="fas fa-star me-2"></i>Điểm mạnh của DINOv2</h6>
+                    <p class="small mb-0">
+                        DINOv2 sử dụng phương pháp <strong>học tự giám sát (Self-supervised learning)</strong> trên lượng dữ liệu khổng lồ. Điều này giúp nó học được các đặc trưng ngữ nghĩa (semantic features) rất mạnh mẽ (ví dụ: phân biệt được cấu trúc của "băng" và "tuyết"), dẫn đến kết quả tốt nhất trên tập dữ liệu này.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-5">
+            <div class="col-12">
+                <div class="custom-card card bg-dark text-white p-4 text-center">
+                    <h3 class="fw-bold mb-3">TỔNG KẾT DỰ ÁN</h3>
+                    <div class="row justify-content-center">
+                        <div class="col-md-8">
+                            <p class="lead">
+                                Mô hình tối ưu nhất cho bài toán phân loại thời tiết là sự kết hợp giữa:
+                                <br>
+                                <span class="text-warning fw-bold">Feature Extractor: DINOv2</span> + <span class="text-info fw-bold">Classifier: Logistic Regression</span>
+                            </p>
+                            <p class="small text-white-50 mt-3">Độ chính xác: <strong>91%</strong> | Macro F1: <strong>0.92</strong></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <footer class="text-center py-4 mt-5 bg-white border-top text-muted">
+        <small>&copy; 2024 Nhóm MLP2 - Báo cáo môn Học Máy (CO3117)</small>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Báo cáo BTLMR - Nhóm MLP2</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body { background-color: #f8f9fa; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #333; }
+        
+        /* HEADER STYLE TỪ BTL3 */
+        .report-header {
+            background: linear-gradient(135deg, #0288d1 0%, #00acc1 100%);
+            color: white; padding: 4rem 0; margin-bottom: 3rem;
+            box-shadow: 0 4px 15px rgba(0, 150, 136, 0.2);
+        }
+        
+        /* SECTIONS */
+        .section-title {
+            border-left: 5px solid #0288d1; padding-left: 15px; margin: 60px 0 30px 0;
+            font-weight: 800; color: #01579b; text-transform: uppercase; letter-spacing: 0.5px;
+        }
+        .sub-title {
+            font-weight: 700; color: #455a64; margin-top: 30px; margin-bottom: 15px;
+            border-bottom: 2px solid #cfd8dc; padding-bottom: 5px; display: inline-block;
+        }
+
+        /* CARDS */
+        .custom-card {
+            border: none; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            transition: all 0.3s ease; height: 100%; background: #fff;
+        }
+        .custom-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.08); }
+
+        /* CODE BLOCKS */
+        .code-block {
+            background-color: #282c34; color: #abb2bf;
+            padding: 15px; border-radius: 8px; font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem; overflow-x: auto; white-space: pre;
+        }
+        .formula-inline {
+            font-family: 'Times New Roman', serif; font-style: italic; background-color: #e3f2fd; padding: 0 4px; border-radius: 3px; color: #0d47a1;
+        }
+
+        /* CHART FRAMES (Placeholder cho ảnh) */
+        .chart-frame {
+            border: 1px solid #dee2e6; border-radius: 8px; background-color: #fff;
+            width: 100%; display: flex; align-items: center; justify-content: center;
+            overflow: hidden; padding: 10px; position: relative; min-height: 200px;
+        }
+        /* Style cho thẻ img để khớp với class cũ */
+        .chart-frame img { max-width: 100%; height: auto; }
+
+        /* TABLE STYLES */
+        .table-custom thead { background-color: #37474f; color: white; }
+        
+        /* NOTE BOX */
+        .muted-box {
+            background-color: #f1f8e9; border-left: 4px solid #8bc34a; padding: 15px; border-radius: 4px; margin-bottom: 20px;
+        }
+        .note-item { margin-bottom: 5px; font-weight: 500; color: #33691e; }
+        .pseudocode-box {
+            background-color: #282c34; border-radius: 6px;
+            padding: 20px; font-family: 'Fira Code', monospace; font-size: 0.9em;
+            color: #abb2bf; overflow-x: auto; margin-top: 10px; line-height: 1.6;
+            white-space: pre; border-left: 4px solid #fdd835;
+        }
+        .kw { color: #c678dd; font-weight: bold; } /* Keywords: FOR, IF, RETURN */
+        .func { color: #61afef; font-weight: bold; } /* Functions */
+        .var { color: #e06c75; } /* Variables */
+        .comment { color: #5c6370; font-style: italic; }
+        .op { color: #56b6c2; } /* Operators */
+    </style>
+</head>
+<body>
+
+    <header class="report-header text-center">
+        <div class="container">
+            <h1 class="display-5 fw-bold mb-3">BÁO CÁO HỌC MÁY (MR)</h1>
+            <p class="fs-4 opacity-90 mb-2">Hidden Markov Model: Weather prediction and POS labeling</p>
+        
+        </div>
+    </header>
+
+    <div class="container pb-5" style="margin-top: -3rem;">
+
+    
+
+        <h2 class="section-title">1. Thuật toán Forward</h2>
+        <div class="custom-card card p-4 mb-4">
+            <p>Thuật toán Forward được sử dụng để tính xác suất của một chuỗi quan sát P(O | <span class="formula-inline">λ</span>), với mô hình <span class="formula-inline">λ = (A, B, π)</span>.</p>
+            <ul>
+                <li><strong>Khởi tạo:</strong> <code class="formula-inline">α₁(i) = π_i · b_i(O₁)</code></li>
+                <li><strong>Truy hồi:</strong> <code class="formula-inline">αₜ₊₁(j) = [Σ_{i=1}^N αₜ(i) · a_{ij}] · b_j(O_{t+1})</code></li>
+                <li><strong>Kết thúc:</strong> <code class="formula-inline">P(O | λ) = Σ_{i=1}^N α_T(i)</code></li>
+            </ul>
+            <div class="code-block">
+def forward(obs, A, B, pi):
+    N = A.shape[0]
+    T = len(obs)
+    alpha = np.zeros((T, N))
+    alpha[0, :] = pi * B[:, obs[0]]
+    for t in range(1, T):
+        for j in range(N):
+            alpha[t, j] = np.sum(alpha[t-1, :] * A[:, j]) * B[j, obs[t]]
+    return np.sum(alpha[-1, :]), alpha
+            </div>
+        </div>
+
+        <h2 class="section-title">2. Thuật toán Backward</h2>
+        <div class="custom-card card p-4 mb-4">
+            <p>Thuật toán Backward tính biến <span class="formula-inline">βₜ(i)</span> là xác suất của chuỗi quan sát từ t+1 đến T, cho biết trạng thái tại t là S_i. Nó thường kết hợp với Forward trong Baum-Welch.</p>
+            <ul>
+                <li><strong>Khởi tạo:</strong> <code class="formula-inline">β_T(i) = 1</code></li>
+                <li><strong>Truy hồi:</strong> <code class="formula-inline">βₜ(i) = Σ_{j=1}^N a_{ij} · b_j(O_{t+1}) · β_{t+1}(j)</code></li>
+            </ul>
+            <div class="code-block">
+def backward(obs, A, B):
+    N = A.shape[0]
+    T = len(obs)
+    beta = np.zeros((T, N))
+    beta[T-1, :] = 1
+    for t in range(T-2, -1, -1):
+        for i in range(N):
+            beta[t, i] = np.sum(A[i, :] * B[:, obs[t+1]] * beta[t+1, :])
+    return beta
+            </div>
+        </div>
+
+        <h2 class="section-title">3. Thuật toán Baum-Welch</h2>
+        <div class="custom-card card p-4 mb-4">
+            <p>Baum-Welch (Forward-Backward) là bản EM để huấn luyện HMM từ quan sát O, ước lượng <span class="formula-inline">λ = (A, B, π)</span>.</p>
+            <ol>
+                <li><strong>E-step:</strong> Tính <span class="formula-inline">γₜ(i)</span> và <span class="formula-inline">ξₜ(i,j)</span> từ các biến <span class="formula-inline">α</span> và <span class="formula-inline">β</span>.</li>
+                <li><strong>M-step:</strong> Cập nhật <span class="formula-inline">π, A, B</span> dựa trên các kỳ vọng.</li>
+            </ol>
+            <div class="code-block">
+def baum_welch(obs, N, M, n_iter=100):
+    T = len(obs)
+    A = np.random.dirichlet(np.ones(N), size=N)
+    B = np.random.dirichlet(np.ones(M), size=N)
+    pi = np.random.dirichlet(np.ones(N))
+    for _ in range(n_iter):
+        P,alpha=forward(obs,A,B,pi)
+        beta = backward(obs, A, B)
+        xi = np.zeros((T - 1, N, N))
+        for t in range(T - 1):
+            denom = (alpha[t][:, None] * A * B[:, obs[t + 1]] * beta[t + 1]).sum()
+            xi[t] = (alpha[t][:, None] * A * B[:, obs[t + 1]] * beta[t + 1]) / denom
+        gamma = xi.sum(axis=2)
+        gamma = np.vstack([gamma, (alpha[-1] * beta[-1]) / P])
+        pi = gamma[0]
+        A = xi.sum(axis=0) / (gamma[:-1].sum(axis=0)[:, None])
+        for k in range(M):
+            B[:, k] = gamma[np.array(obs) == k].sum(axis=0)
+        B = B / (gamma.sum(axis=0)[:, None])
+    return A, B, pi 
+            </div>
+        </div>
+
+        <h2 class="section-title">4. Thuật toán Viterbi</h2>
+        <div class="custom-card card p-4 mb-4">
+            <p>Viterbi tìm chuỗi trạng thái ẩn Q có xác suất lớn nhất (max-likelihood path). Thuật toán dùng quy hoạch động qua các biến <span class="formula-inline">δₜ(i)</span> và backpointer <span class="formula-inline">ψₜ(i)</span>.</p>
+            <div class="code-block">
+def viterbi(obs, A, B, pi):
+    N = A.shape[0]
+    T = len(obs)
+    delta = np.zeros((T, N)) 
+    psi = np.zeros((T, N), dtype=int) 
+    delta[0, :] = pi * B[:, obs[0]]
+    for t in range(1, T):
+        for j in range(N):
+            seq_probs = delta[t-1, :] * A[:, j]
+            psi[t, j] = np.argmax(seq_probs)
+            delta[t, j] = np.max(seq_probs) * B[j, obs[t]]
+    states = np.zeros(T, dtype=int)
+    states[-1] = np.argmax(delta[-1, :])
+    for t in range(T-2, -1, -1):
+        states[t] = psi[t+1, states[t+1]]
+    return states, delta, psi
+            </div>
+        </div>
+
+        <div class="row g-4 mb-4">
+            <div class="col-md-6">
+                <div class="custom-card card p-4">
+                    <h5 class="fw-bold text-primary">5. Huấn luyện không giám sát — Ứng dụng dự đoán thời tiết</h5>
+                    <p>Ứng dụng dùng Baum-Welch để học tham số từ chuỗi quan sát thời tiết (ví dụ: 0=Sunny, 1=Cloudy, 2=Rainy). Sau khi học, ta có thể dùng phân phối trạng thái để sinh dự đoán ngẫu nhiên hoặc chọn quan sát có xác suất cao nhất.</p>
+                    <p class="small text-muted fst-italic"><strong>Lưu ý:</strong> trong notebook nhóm dùng N=50 (ước đoán sơ bộ cho số trạng thái ẩn) và thử cả chế độ ngẫu nhiên (random=True) và không ngẫu nhiên.</p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="custom-card card p-4">
+                    <h5 class="fw-bold text-primary">6. Huấn luyện có giám sát — Phân loại từ (POS tagging)</h5>
+                    <p>Khi có dữ liệu đã gán nhãn, ta có thể ước lượng trực tiếp <span class="formula-inline">π, A, B</span> bằng phương pháp đếm tần suất trên tập huấn luyện rồi chuẩn hoá.</p>
+                    <p class="small">Quy trình tóm tắt: tải Treebank (universal_tagset), chia train/test, xây vocab và mapping, tính ma trận A, B, <span class="formula-inline">π</span> bằng đếm và chuẩn hoá, sau đó dùng Viterbi để gán nhãn trên tập kiểm thử.</p>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="section-title">Nhận xét & đánh giá</h2>
+        <div class="custom-card card p-4 mb-4">
+            <h5 class="fw-bold">Nhận xét:</h5>
+            <ul>
+                <li>HMM với Baum-Welch có thể học xu hướng thời tiết ngắn hạn và sinh kịch bản dự đoán hợp lý.</li>
+                <li>Với dự đoán không ngẫu nhiên, mô hình có khuynh hướng hội tụ vào trạng thái lặp lại, phản ánh đặc tính chu kỳ của dữ liệu.</li>
+                <li>Trong bài toán POS tagging, HMM cổ điển vẫn đem lại kết quả tốt (~90% trong notebook) khi dữ liệu gán nhãn đủ lớn.</li>
+            </ul>
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <h5 class="fw-bold text-success">Ưu điểm:</h5>
+                    <ul>
+                        <li>Không cần tài nguyên tính toán lớn, dễ triển khai và giải thích.</li>
+                        <li>Thích hợp cho các tác vụ chuỗi cơ bản như tagging, chunking.</li>
+                    </ul>
+                </div>
+                <div class="col-md-6">
+                    <h5 class="fw-bold text-danger">Hạn chế:</h5>
+                    <ul>
+                        <li>Khó xử lý ngữ cảnh dài do tính Markov bậc 1.</li>
+                        <li>Hiệu suất kém với nhãn hiếm hoặc bối cảnh phức tạp; không bắt được ngữ nghĩa sâu như mô hình hiện đại.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="section-title">7. Kết luận chung</h2>
+        <div class="custom-card card p-4 mb-5">
+            <p>Notebook trình bày cài đặt và thí nghiệm HMM cho cả bài toán không giám sát (dự đoán thời tiết) và có giám sát (POS tagging). Nhóm đã hiện thực các thuật toán Forward, Backward, Baum-Welch và Viterbi, và trình bày kết quả thực nghiệm với các đánh giá rút ra.</p>
+            <hr>
+            <h5 class="fw-bold text-center my-3">Kết luận chi tiết</h5>
+            <p>Bài tập lớn này đã tập trung vào việc tìm hiểu lý thuyết và triển khai thực tế các thuật toán cốt lõi của Mô hình Markov ẩn (HMM) cho các bài toán xử lý chuỗi.</p>
+            <p>Nhóm đã cài đặt thành công bốn thuật toán nền tảng:</p>
+            <ul>
+                <li>Thuật toán Forward: Tính toán xác suất của một chuỗi quan sát.</li>
+                <li>Thuật toán Backward: Tính toán xác suất (sử dụng trong Baum-Welch).</li>
+                <li>Thuật toán Baum-Welch (Forward-Backward): Huấn luyện mô hình (ước lượng A, B, π) trong bối cảnh học không giám sát.</li>
+                <li>Thuật toán Viterbi: Tìm chuỗi trạng thái ẩn "tốt nhất" (có xác suất cao nhất) cho một chuỗi quan sát.</li>
+            </ul>
+            <p>Để minh họa khả năng của HMM, hai ứng dụng thực tế đã được triển khai với hai phương pháp huấn luyện khác nhau:</p>
+            <ol>
+                <li class="mb-2"><strong>Huấn luyện không giám sát (Dự đoán thời tiết):</strong> Sử dụng thuật toán Baum-Welch để tự động học các tham số mô hình từ một chuỗi quan sát thời tiết (Nắng, Mây, Mưa) mà không biết trước các trạng thái ẩn. Kết quả cho thấy mô hình có khả năng nắm bắt được các xu hướng thời tiết ngắn hạn và sinh ra các dự đoán hợp lý, mặc dù bị giới hạn bởi giả định Markov bậc một và sự đơn giản của dữ liệu đầu vào.</li>
+                <li><strong>Huấn luyện có giám sát (Gán nhãn từ loại - POS Tagging):</strong> Tận dụng dữ liệu đã gán nhãn (tập Treebank của NLTK), các tham số mô hình (A, B, π) được ước lượng trực tiếp bằng cách đếm tần suất từ tập huấn luyện. Thuật toán Viterbi sau đó được áp dụng trên tập kiểm thử để tìm chuỗi nhãn từ loại (trạng thái ẩn) tối ưu cho các câu (quan sát). Mô hình đạt độ chính xác ấn tượng (khoảng 90%), khẳng định HMM là một phương pháp thống kê cổ điển rất hiệu quả và đáng tin cậy cho các bài toán gán nhãn chuỗi trong NLP.</li>
+            </ol>
+        </div>
+
+        <h2 class="section-title">Visualizations</h2>
+        
+        <div class="custom-card card p-4 mb-4">
+            <h5 class="fw-bold">Visualize 1 : Plot probability trong baum-welch</h5>
+            <p><strong>Input:</strong> Dãy quan sát random</p>
+            <p><strong>Expect:</strong> Probability tăng dần, không giảm</p>
+            <div class="chart-frame text-center">
+                <img src="probability_expore_test_obs.png" alt="Visualize 1" onerror="this.parentElement.innerHTML='<div class=\'text-muted p-5\'>[IMG 1: Plot Probability]</div>'">
+            </div>
+        </div>
+
+        <div class="custom-card card p-4 mb-4">
+            <h5 class="fw-bold">Visualize 2 : View test HMM, so với kết quả của Baum-welch</h5>
+            <p><strong>Input:</strong> test HMM và Dãy quan sát có khả năng nhất của test HMM</p>
+            <p><strong>Expect:</strong> Kết quả của Viterbi không nhất thiết phải giống gốc nhưng max-likelihood observation giữa cả hai phải có độ tương quan cao</p>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <div class="chart-frame"><img src="test_hmm_view.png" alt="Img 2" onerror="this.parentElement.innerHTML='<div class=\'text-muted p-5\'>[IMG 2]</div>'"></div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <div class="chart-frame"><img src="vitabi_infered_from_test_hmm_view.png" alt="Img 3" onerror="this.parentElement.innerHTML='<div class=\'text-muted p-5\'>[IMG 3]</div>'"></div>
+                </div>
+            </div>
+            <div class="alert alert-light border border-secondary">
+                <p class="mb-1"><strong>Kết quả so Maximum-liklihood observation:</strong> cả hai hầu hết giống nhau, khác mỗi obs đầu tiên</p>
+                <p class="mb-1 text-muted small">Obs cũ: [1, 1, 1, 1, ...] (HMM được chọn để max obs luôn là 1)</p>
+                <p class="mb-0 text-muted small">Obs recover: [0, 1, 1, 1, ...]</p>
+            </div>
+        </div>
+
+        <h2 class="section-title" id="app1">Application 1: Weather prediction</h2>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="custom-card card p-3 h-100">
+                    <h5 class="fw-bold">Code</h5>
+                    <div class="code-block" style="font-size: 0.8rem;">
+symbols = ["☀️", "⛅", "☔"]
+obs = [1, 0, 0, 0, 1, 0, 1, 1, 1, 0, 1, 1, 2, 1, 1, 1, 1, 2, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 0, 2, 2, 2, 2, 0, 2, 1, 1, 2, 1, 1, 0, 0, 0, 1, 2, 2, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 2]
+N = 100 
+M = 3
+A_arr, B_arr, pi_arr, prob_arr = baum_welch_scaled(obs, N, M, 100, True)
+A = A_arr[-1]
+B = B_arr[-1]
+pi = pi_arr[-1]
+                    </div>
+                    <p class="mt-3">Dữ liệu được lấy từ <a href="https://www.timeanddate.com/weather/vietnam/ho-chi-minh/historic" target="_blank">thời tiết tại thành phố Hồ Chí Minh, bắt đầu từ 29/11/2025</a></p>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="custom-card card p-3 h-100 bg-dark text-white">
+                    <h5 class="fw-bold">Kết quả</h5>
+                    <div class="code-block bg-black text-white border border-secondary" style="height: 300px; overflow-y: scroll;">
+ Random next sequences:
+ ['☔', '⛅', '☀️', '☀️', '☀️', '⛅', '☔', '⛅', '⛅', '⛅']
+ ['⛅', '☔', '☔', '☔', '☔', '☔', '☔', '☔', '☔', '⛅']
+ ['⛅', '☔', '☔', '☔', '☔', '☔', '☔', '☔', '☔', '⛅']
+ ['⛅', '⛅', '☀️', '☀️', '☀️', '☔', '☔', '⛅', '⛅', '⛅']
+ ['☔', '☔', '☔', '☔', '☔', '☔', '☔', '☔', '☔', '⛅']
+ ...
+ Maximum likely next sequence
+ ['⛅', '⛅', '☀️', '☀️', '☀️', '☔', '☔', '☔', '☔', '⛅', '⛅', '☔', '⛅', '☔', '☀️', '☀️', '☀️', '☔', '☔', '☔', '☔', '⛅', '☔', '⛅', '⛅', '☔', '☀️', '☀️', '☀️', '☀️', '☔', '☔', '⛅', '⛅', '⛅', '⛅', '⛅', '⛅', '☀️', '☀️', '☀️', '☔', '☔', '☔', '⛅', '⛅', '⛅', '⛅', '⛅', '⛅']
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-4 g-4">
+            <div class="col-md-4">
+                <div class="custom-card card p-2 text-center">
+                    <p class="small fw-bold">Log probability của dãy quan sát input (Baum-Welch)</p>
+                    <div class="chart-frame"><img src="probability_expore_weather_obs.png" onerror="this.parentElement.innerHTML='[IMG 4]'"></div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="custom-card card p-2 text-center">
+                    <p class="small fw-bold">View HMM</p>
+                    <div class="chart-frame"><img src="weather_hmm_view.png" onerror="this.parentElement.innerHTML='[IMG 5]'"></div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="custom-card card p-2 text-center">
+                    <p class="small fw-bold">Output Viterbi: Dãy most-likely state traveled</p>
+                    <div class="chart-frame"><img src="state_path_weather_HMM.png" onerror="this.parentElement.innerHTML='[IMG 6]'"></div>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="section-title" id="app2">Application 2: POS labeling</h2>
+        <div class="custom-card card p-4 mb-4">
+            <h5 class="fw-bold">Dataset</h5>
+            <p class="note-item fst-italic">Nhóm dùng bộ Universal tagse của Treebank corpus cho Application này.</p>
+        </div>
+        <div class="pseudocode-box" style="background-color: #e8f5e9; border: 1px solid #a5d6a7;"><span class="kw">PROCEDURE</span> Supervised_Training(<span class="var">labeled_sentences</span>):
+    <span class="kw">FOR EACH</span> (word, tag) in <span class="var">sentences</span>:
+        Count(<span class="var">tag_prev</span> -> <span class="var">tag_curr</span>)++  <span class="comment">// Cho ma trận A</span>
+        Count(<span class="var">tag</span> emits <span class="var">word</span>)++        <span class="comment">// Cho ma trận B</span>
+    
+    Apply_Laplace_Smoothing()
+    Normalize_Matrices()
+    <span class="kw">RETURN</span> <span class="var">A</span>, <span class="var">B</span>, <span class="var">pi</span></div>
+                </div>
+
+        <div class="row g-4">
+            <div class="col-md-5">
+                <div class="custom-card card p-3">
+                    <h5 class="text-center fw-bold text-secondary">Confusion matrix</h5>
+                    <div class="chart-frame h-lg">
+                        <img src="confusion_matrix_POS_labeling.png" alt="Confusion Matrix" onerror="this.parentElement.innerHTML='<div class=\'text-center text-danger py-5\'>Thiếu ảnh: img7</div>'">
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-7">
+                <div class="custom-card card p-0 overflow-hidden h-100">
+                    <div class="card-header bg-dark text-white fw-bold">Kết quả</div>
+                    <div class="table-responsive">
+                        <table class="table table-hover table-striped table-sm mb-0 align-middle text-center">
+                            <thead class="table-secondary">
+                                <tr>
+                                    <th class="text-start ps-4">Nhãn</th>
+                                    <th>Precision</th>
+                                    <th>Recall</th>
+                                    <th>F1-Score</th>
+                                    <th>Support</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td class="fw-bold text-start ps-4">.</td><td>0.96</td><td>1.00</td><td>0.98</td><td>2354</td></tr>
+                                <tr><td class="fw-bold text-start ps-4">ADJ</td><td>0.79</td><td>0.70</td><td>0.75</td><td>1316</td></tr>
+                                <tr><td class="fw-bold text-start ps-4">ADP</td><td>0.87</td><td>0.97</td><td>0.92</td><td>2028</td></tr>
+                                <tr><td class="fw-bold text-start ps-4">ADV</td><td>0.86</td><td>0.70</td><td>0.77</td><td>634</td></tr>
+                                <tr><td class="fw-bold text-start ps-4">CONJ</td><td>0.97</td><td>0.99</td><td>0.98</td><td>471</td></tr>
+                                <tr><td class="fw-bold text-start ps-4">DET</td><td>0.78</td><td>0.96</td><td>0.86</td><td>1795</td></tr>
+                                <tr><td class="fw-bold text-start ps-4">NOUN</td><td>0.93</td><td>0.89</td><td>0.91</td><td>5943</td></tr>
+                                <tr><td class="fw-bold text-start ps-4">NUM</td><td>0.95</td><td>0.76</td><td>0.84</td><td>727</td></tr>
+                                <tr><td class="fw-bold text-start ps-4">PRON</td><td>0.91</td><td>0.97</td><td>0.94</td><td>523</td></tr>
+                                <tr><td class="fw-bold text-start ps-4">PRT</td><td>0.90</td><td>0.94</td><td>0.92</td><td>658</td></tr>
+                                <tr><td class="fw-bold text-start ps-4">VERB</td><td>0.92</td><td>0.84</td><td>0.88</td><td>2740</td></tr>
+                                <tr><td class="fw-bold text-start ps-4">X</td><td>0.90</td><td>0.93</td><td>0.91</td><td>1360</td></tr>
+                                <tr class="table-info fw-bold"><td class="text-start ps-4">accuracy</td><td colspan="2"></td><td>0.90</td><td>20549</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-5">
+            <div class="col-12">
+                <div class="custom-card card p-4">
+                    <h3 class="section-title mt-0">Nhận xét kết quả</h3>
+                    <p>Mô hình gán nhãn từ loại sử dụng HMM huấn luyện có giám sát đạt độ chính xác khoảng 89.60%, đây là mức kết quả tốt đối với mô hình thống kê cổ điển, đặc biệt trên tập dữ liệu tiếng Anh thực tế và đa dạng.</p>
+                    <p>Các nhãn như <strong>NOUN</strong>, <strong>VERB</strong>, <strong>ADJ</strong>, <strong>ADV</strong> được mô hình dự đoán khá chính xác với F1-score cao, chứng tỏ HMM hoạt động tốt đối với các từ loại có tần suất xuất hiện lớn và cấu trúc ngữ pháp rõ ràng.</p>
+                    <p>Một số nhãn như <strong>CONJ</strong>, <strong>PRON</strong>, <strong>PRP</strong>, <strong>X</strong> có kết quả thấp hơn, thể hiện rõ trên ma trận nhầm lẫn, nguyên nhân có thể do kích thước mẫu nhỏ hoặc hiện tượng trùng nghĩa/ngữ cảnh khó phân tách.</p>
+                    <p>Ma trận nhầm lẫn cho thấy sự nhầm lẫn phổ biến giữa <strong>NOUN ↔ VERB</strong> và <strong>ADP ↔ ADV</strong>, phản ánh việc HMM đôi khi khó phân biệt vai trò cú pháp theo ngữ cảnh mà chỉ dựa trên xác suất chuyển trạng thái và phát xạ.</p>
+                    
+                    <div class="row mt-3">
+                         <div class="col-md-6">
+                            <h5 class="fw-bold text-success">Ưu điểm</h5>
+                            <ul>
+                                <li>Độ chính xác cao và ổn định so với phương pháp thuần thống kê truyền thống.</li>
+                                <li>Không yêu cầu mô hình học sâu hay tài nguyên tính toán lớn, dễ triển khai và giải thích.</li>
+                                <li>Kết quả tin cậy trên các từ loại phổ biến, phù hợp với ứng dụng NLP mức cơ bản đến trung bình.</li>
+                                <li>Thuật toán cho phép mở rộng sang nhiều tác vụ chuỗi khác nhau (tagging, chunking, NER).</li>
+                            </ul>
+                         </div>
+                         <div class="col-md-6">
+                            <h5 class="fw-bold text-danger">Hạn chế</h5>
+                            <ul>
+                                <li>Khó xử lý ngữ cảnh dài hoặc câu phức tạp vì đặc tính Markov bậc một.</li>
+                                <li>Các nhãn hiếm hoặc linh hoạt theo ngữ cảnh (ví dụ: PRON, X, CONJ) cho kết quả chưa cao.</li>
+                                <li>Mô hình thống kê đơn thuần không tiếp thu kiến thức ngữ nghĩa, phong cách hoặc cấu trúc cú pháp sâu như mô hình học sâu (Bi-LSTM, CRF, Transformer).</li>
+                                <li>Nhầm lẫn tăng ở các cặp từ loại dễ hoán đổi vai trò trong câu, đặc biệt khi thiếu thông tin mở rộng như embedding hoặc vector ngữ cảnh.</li>
+                            </ul>
+                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="custom-card card p-4 mt-5 bg-light">
+            <h2 class="section-title mt-0 text-dark">Nhận xét (Tổng hợp lại)</h2>
+            <p class="small text-muted"><em>(Nội dung dưới đây được giữ nguyên từ phần cuối file gốc để đảm bảo tính toàn vẹn)</em></p>
+            <p>Mô hình gán nhãn từ loại sử dụng HMM huấn luyện có giám sát đạt độ chính xác khoảng 89.60%, đây là mức kết quả tốt đối với mô hình thống kê cổ điển, đặc biệt trên tập dữ liệu tiếng Anh thực tế và đa dạng.</p>
+            <p>Các nhãn như <strong>NOUN</strong>, <strong>VERB</strong>, <strong>ADJ</strong>, <strong>ADV</strong> được mô hình dự đoán khá chính xác với F1-score cao, chứng tỏ HMM hoạt động tốt đối với các từ loại có tần suất xuất hiện lớn và cấu trúc ngữ pháp rõ ràng.</p>
+            <p>Một số nhãn như <strong>CONJ</strong>, <strong>PRON</strong>, <strong>PRP</strong>, <strong>X</strong> có kết quả thấp hơn, thể hiện rõ trên ma trận nhầm lẫn, nguyên nhân có thể do kích thước mẫu nhỏ hoặc hiện tượng trùng nghĩa/ngữ cảnh khó phân tách.</p>
+            <p>Ma trận nhầm lẫn cho thấy sự nhầm lẫn phổ biến giữa <strong>NOUN ↔ VERB</strong> và <strong>ADP ↔ ADV</strong>, phản ánh việc HMM đôi khi khó phân biệt vai trò cú pháp theo ngữ cảnh mà chỉ dựa trên xác suất chuyển trạng thái và phát xạ.</p>
+            <h5 class="fw-bold mt-3">Ưu điểm</h5>
+            <ul>
+                <li>Độ chính xác cao và ổn định so với phương pháp thuần thống kê truyền thống.</li>
+                <li>Không yêu cầu mô hình học sâu hay tài nguyên tính toán lớn, dễ triển khai và giải thích.</li>
+                <li>Kết quả tin cậy trên các từ loại phổ biến, phù hợp với ứng dụng NLP mức cơ bản đến trung bình.</li>
+                <li>Thuật toán cho phép mở rộng sang nhiều tác vụ chuỗi khác nhau (tagging, chunking, NER).</li>
+            </ul>
+            <h5 class="fw-bold mt-3">Hạn chế</h5>
+            <ul>
+                <li>Khó xử lý ngữ cảnh dài hoặc câu phức tạp vì đặc tính Markov bậc một.</li>
+                <li>Các nhãn hiếm hoặc linh hoạt theo ngữ cảnh (ví dụ: PRON, X, CONJ) cho kết quả chưa cao.</li>
+                <li>Mô hình thống kê đơn thuần không tiếp thu kiến thức ngữ nghĩa, phong cách hoặc cấu trúc cú pháp sâu như mô hình học sâu (Bi-LSTM, CRF, Transformer).</li>
+                <li>Nhầm lẫn tăng ở các cặp từ loại dễ hoán đổi vai trò trong câu, đặc biệt khi thiếu thông tin mở rộng như embedding hoặc vector ngữ cảnh.</li>
+            </ul>
+        </div>
+
+    </div>
+
+    <footer class="text-center py-4 mt-5 bg-white border-top text-muted">
+        <small>&copy; 2024 - 2025 Nhóm MLP2 - Báo cáo môn Học Máy (Machine Learning)</small>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

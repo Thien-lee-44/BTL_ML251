@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Báo cáo BTL1 - Nhóm MLP2</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body { background-color: #f4f7f6; font-family: 'Roboto', sans-serif; color: #333; }
+        
+        /* HEADER */
+      .report-header {
+            background: linear-gradient(135deg, #1cb5e0 0%, #000046 100%);
+            color: white; padding: 5rem 0; margin-bottom: 3rem;
+        }
+        
+        /* SECTION STYLES */
+        .section-header {
+            border-left: 6px solid #000046; padding-left: 20px; margin: 60px 0 30px 0;
+            color: #000046; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
+        }
+        .sub-header {
+            font-weight: 700; color: #555; margin-top: 30px; margin-bottom: 15px; border-bottom: 2px solid #e9ecef; display: inline-block;
+        }
+        
+        /* CARDS */
+       .custom-card {
+            border: none; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            background: #fff; transition: transform 0.3s;
+        }
+        .custom-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+
+        /* PROCESS STEPS */
+
+
+        /* CHART FRAMES & DESCRIPTIONS */
+        .chart-frame {
+            border: 2px dashed #ced4da; border-radius: 8px; padding: 5px;
+            display: flex; justify-content: center; align-items: center; background: #fff;
+            position: relative; overflow: hidden;
+        }
+        .chart-frame img { width: 100%; height: 100%; object-fit: contain; }
+        .h-sm { height: 200px; }
+        .h-md { height: 300px; }
+        .h-lg { height: 450px; }
+        
+        .chart-desc {
+            font-size: 0.9rem; color: #666; margin-top: 10px; font-style: italic;
+            border-top: 1px solid #eee; padding-top: 8px;
+        }
+
+        /* TABLE */
+        .table-custom thead { background-color: #000046; color: white; }
+        .best-val { color: #198754; font-weight: bold; background-color: #d1e7dd; }
+        .process-box {
+            background-color: #ffffff; border-left: 4px solid #1cb5e0;
+            padding: 20px; border-radius: 0 8px 8px 0; margin-bottom: 20px;
+        }
+        .process-title { font-weight: bold; color: #000046; font-size: 1.1rem; display: block; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+
+    <header class="report-header text-center">
+        <div class="container">
+            <h1 class="display-3 fw-bold mb-3">BÁO CÁO HỌC MÁY (BTL1)</h1>
+            <p class="fs-4 opacity-90 mb-4">Phân Loại Băng: Chủ Đề Đự Đoán Giá Xe</p>
+            <div class="d-flex justify-content-center gap-3">
+                <span class="badge bg-light text-dark px-4 py-2 rounded-pill shadow-sm"><i class="fas fa-users me-2"></i>Nhóm MLP2</span>
+                <span class="badge bg-warning text-dark px-4 py-2 rounded-pill shadow-sm"><i class="fas fa-trophy me-2"></i>Best Model: Random Forest</span>
+            </div>
+        </div>
+    </header>
+
+    <div class="container" style="margin-top: -3rem;">
+
+        <h2 class="section-header"><i class="fas fa-database me-2"></i>1. Thông Tin Bộ Dữ Liệu (Dataset Overview)</h2>
+        <div class="row mb-5">
+            <div class="col-12">
+                <div class="custom-card card p-4 shadow-lg">
+                    <div class="row">
+                        <div class="col-md-4 border-end">
+                            <h5 class="fw-bold text-primary mb-3">Tổng quan</h5>
+                            <ul class="list-unstyled">
+                                <li class="mb-2"><strong><i class="fas fa-server me-2"></i>Nguồn:</strong> Kaggle (CooperUnion)</li>
+                                <li class="mb-2"><strong><i class="fas fa-table me-2"></i>Số lượng mẫu:</strong> ~11,914 dòng</li>
+                                <li class="mb-2"><strong><i class="fas fa-columns me-2"></i>Số đặc trưng:</strong> 16 cột</li>
+                                <li class="mb-2"><strong><i class="fas fa-bullseye me-2"></i>Mục tiêu (Target):</strong> <code>MSRP</code> (Giá niêm yết)</li>
+                            </ul>
+                            <div class="alert alert-info small mt-3">
+                                <i class="fas fa-info-circle me-1"></i>
+                                Bộ dữ liệu chứa thông số kỹ thuật của hơn 10.000 mẫu xe hơi được sản xuất từ năm 1990 đến 2017.
+                            </div>
+                        </div>
+                        <div class="col-md-8 ps-md-4">
+                            <h5 class="fw-bold text-primary mb-3">Mô tả các đặc trưng quan trọng</h5>
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-sm dataset-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Tên cột</th>
+                                            <th>Ý nghĩa</th>
+                                            <th>Kiểu dữ liệu</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr><td><code>Make</code> / <code>Model</code></td><td>Hãng sản xuất (BMW, Audi...) & Tên dòng xe</td><td>Categorical</td></tr>
+                                        <tr><td><code>Year</code></td><td>Năm sản xuất</td><td>Numerical</td></tr>
+                                        <tr><td><code>Engine HP</code></td><td>Sức mạnh động cơ (Mã lực) - Ảnh hưởng lớn đến giá</td><td>Numerical</td></tr>
+                                        <tr><td><code>Cylinders</code></td><td>Số xi-lanh động cơ</td><td>Numerical</td></tr>
+                                        <tr><td><code>Transmission Type</code></td><td>Loại hộp số (Tự động, Sàn...)</td><td>Categorical</td></tr>
+                                        <tr><td><code>Driven_Wheels</code></td><td>Hệ dẫn động (FWD, RWD, AWD)</td><td>Categorical</td></tr>
+                                        <tr><td><code>highway MPG</code> / <code>city mpg</code></td><td>Mức tiêu thụ nhiên liệu (Dặm/Gallon)</td><td>Numerical</td></tr>
+                                        <tr><td><code>MSRP</code></td><td><strong>Giá xe (Biến mục tiêu cần dự đoán)</strong></td><td>Numerical</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="section-header"><i class="fas fa-cogs me-2"></i>2. Quy Trình Tiền Xử Lý (Data Preprocessing)</h2>
+        <p class="text-muted mb-4">Các bước làm sạch và chuẩn hóa dữ liệu được thực hiện kỹ lưỡng để đảm bảo mô hình không bị nhiễu.</p>
+        
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="process-box h-100">
+                    <span class="process-title"><i class="fas fa-broom"></i> 1. Làm sạch dữ liệu (Cleaning)</span>
+                    <ul>
+                        <li><strong>Xử lý dữ liệu thiếu (Missing Values):</strong>
+                            <ul>
+                                <li>Loại bỏ cột <code>market_category</code>: Do chứa quá nhiều giá trị Null (>30%), việc điền khuyết (impute) sẽ gây sai lệch lớn.</li>
+                                <li>Điền giá trị trung bình/trung vị cho các ô trống ở cột <code>Engine HP</code>, <code>Cylinders</code>.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Xử lý trùng lặp (Duplicates):</strong> Loại bỏ 715 dòng trùng lặp để tránh hiện tượng mô hình học thuộc lòng (bias) các mẫu xe phổ biến.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="process-box h-100">
+                    <span class="process-title"><i class="fas fa-filter"></i> 2. Xử lý Ngoại lai (Outliers)</span>
+                    <p>Sử dụng phương pháp <strong>IQR (Interquartile Range)</strong> để lọc bỏ các giá trị ngoại lai trên cột giá <code>MSRP</code>.</p>
+                    <p class="small text-muted fst-italic">
+                        *Lý do: Giá xe có phân phối lệch phải (Right-skewed) với một số ít siêu xe giá cực cao (ví dụ: Bugatti). Nếu giữ lại, các mô hình tuyến tính sẽ bị kéo lệch và dự đoán sai cho phân khúc xe phổ thông.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="process-box">
+                    <span class="process-title"><i class="fas fa-sliders-h"></i> 3. Chuẩn hóa & Mã hóa (Encoding & Scaling)</span>
+                    <div class="row">
+                        <div class="col-md-6 border-end">
+                            <strong>Mã hóa (Categorical):</strong> Sử dụng <code>One-Hot Encoding</code> cho các biến như Hãng xe, Loại hộp số. Chuyển đổi dữ liệu chữ sang dạng vector nhị phân [0, 1] để máy tính hiểu được.
+                        </div>
+                        <div class="col-md-6 ps-4">
+                            <strong>Chuẩn hóa (Numerical):</strong> Sử dụng <code>StandardScaler</code> hoặc <code>MinMaxScaler</code> cho các biến như Mã lực, MPG. Đưa các biến về cùng một khoảng giá trị để các mô hình như KNN, SVR hoạt động tốt hơn.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="section-header"><i class="fas fa-chart-pie me-2"></i>3. Phân Tích Dữ Liệu (EDA)</h2>
+        
+        <h5 class="sub-header">Phân Phối Giá Xe (Trước & Sau Xử Lý)</h5>
+        <div class="row g-4 mb-4">
+            <div class="col-md-6">
+                <div class="custom-card card p-3">
+                    <div class="chart-frame h-md"><img src="msrp_before.png" onerror="this.parentElement.innerHTML='Thiếu ảnh: msrp_before.png'"></div>
+                    <p class="chart-desc text-danger"><strong>Trước xử lý:</strong> Biểu đồ lệch phải nặng nề (Right Skewed) do sự xuất hiện của các dòng siêu xe giá cực cao, khiến phần lớn dữ liệu bị dồn về bên trái.</p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="custom-card card p-3">
+                    <div class="chart-frame h-md"><img src="msrp_after_irq.png" onerror="this.parentElement.innerHTML='Thiếu ảnh: msrp_after_irq.png'"></div>
+                    <p class="chart-desc text-success"><strong>Sau xử lý IQR:</strong> Sau khi loại bỏ ngoại lai, phân phối giá trở nên cân đối hơn, trải rộng hợp lý, giúp mô hình học được quy luật chung tốt hơn.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-md-8 mx-auto">
+                <div class="custom-card card p-3 h-100">
+                    <h5 class="text-center fw-bold text-secondary">Ma Trận Tương Quan (Heatmap)</h5>
+                    <div class="chart-frame h-lg"><img src="corr_heatmap.png" onerror="this.parentElement.innerHTML='Thiếu file: corr_heatmap.png'"></div>
+                    <p class="analysis-text"><strong>Nhận xét:</strong> Engine HP (0.74) và Year (0.67) có tương quan dương mạnh nhất với giá xe. Điều này hợp lý vì động cơ lớn thường đi đôi với giá cao.</p>
+                </div>
+            </div>
+        </div>
+
+        <h5 class="sub-header">Phân Tích Quan Hệ Phi Tuyến (Poly Fit Analysis)</h5>
+        <p class="text-muted small">Các đường cong hồi quy đa thức dưới đây chứng minh mối quan hệ giữa đặc trưng và giá xe không phải là đường thẳng đơn giản.</p>
+        <div class="row g-4">
+            <div class="col-md-4"><div class="custom-card card p-2"><div class="chart-frame h-sm"><img src="engine_hp_poly_fit.png"></div><p class="chart-desc text-center small">Giá tăng theo lũy thừa của Mã lực.</p></div></div>
+            <div class="col-md-4"><div class="custom-card card p-2"><div class="chart-frame h-sm"><img src="year_poly_fit.png"></div><p class="chart-desc text-center small">Xe đời mới có giá tăng vọt so với xe cũ.</p></div></div>
+            <div class="col-md-4"><div class="custom-card card p-2"><div class="chart-frame h-sm"><img src="engine_cyllinder_poly_fit.png"></div><p class="chart-desc text-center small">Số xi-lanh tăng, giá tăng theo bậc thang.</p></div></div>
+            <div class="col-md-4"><div class="custom-card card p-2"><div class="chart-frame h-sm"><img src="city_poly_fit.png"></div><p class="chart-desc text-center small">Mối quan hệ nghịch biến yếu với MPG.</p></div></div>
+            <div class="col-md-4"><div class="custom-card card p-2"><div class="chart-frame h-sm"><img src="highway_poly_fit.png"></div><p class="chart-desc text-center small">Tương tự City MPG, xe tốn xăng thường đắt hơn.</p></div></div>
+            <div class="col-md-4"><div class="custom-card card p-2"><div class="chart-frame h-sm"><img src="n_door_poly_fit.png"></div><p class="chart-desc text-center small">Số cửa ít ảnh hưởng rõ rệt đến giá.</p></div></div>
+        </div>
+
+        <h2 class="section-header"><i class="fas fa-laptop-code me-2"></i>4. Kết Quả Dự Đoán</h2>
+        
+        <h5 class="sub-header text-primary">A. Nhóm Mô Hình Tuyến Tính</h5>
+        <div class="row g-4 mb-4">
+            <div class="col-md-6">
+                <div class="custom-card card">
+                    <div class="card-body text-center">
+                        <div class="chart-frame h-md"><img src="linear.png" onerror="this.parentElement.innerHTML='Thiếu ảnh: linear.png'"></div>
+                        <h6 class="fw-bold mt-2">Linear Regression</h6>
+                        <p class="chart-desc">Mô hình bị <strong>Underfitting</strong>. Đường dự đoán (xanh) không bám sát được các giá trị thực tế cao, bị lệch lớn so với đường lý tưởng (đỏ). R² chỉ đạt khoảng 0.80.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="custom-card card">
+                    <div class="card-body text-center">
+                        <div class="chart-frame h-md"><img src="lasso.png" onerror="this.parentElement.innerHTML='Thiếu ảnh: lasso.png'"></div>
+                        <h6 class="fw-bold mt-2">Lasso Regression</h6>
+                        <p class="chart-desc">Hiệu suất tương đương Linear Regression. Regularization không giúp cải thiện tình hình vì vấn đề cốt lõi là tính phi tuyến của dữ liệu, không phải đa cộng tuyến.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h5 class="sub-header text-success">B. Random Forest (Mô Hình Tốt Nhất)</h5>
+        <div class="row g-4 mb-4">
+            <div class="col-md-6">
+                <div class="custom-card card">
+                    <div class="card-body text-center">
+                        <div class="chart-frame h-md"><img src="RFR50.png" onerror="this.parentElement.innerHTML='Thiếu ảnh: RFR50.png'"></div>
+                        <h6 class="fw-bold mt-2">Random Forest (n=50)</h6>
+                        <p class="chart-desc">Kết quả rất tốt, các điểm dự đoán bắt đầu co cụm sát đường chéo. R² đạt 0.930.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="custom-card card border-success border-2 shadow">
+                    <div class="card-body text-center">
+                        <div class="chart-frame h-md"><img src="RFR100.png" onerror="this.parentElement.innerHTML='Thiếu ảnh: RFR100.png'"></div>
+                        <h6 class="fw-bold mt-2 text-success"><i class="fas fa-crown me-1"></i>Random Forest (n=100)</h6>
+                        <p class="chart-desc text-success fw-bold">Kết quả xuất sắc nhất (R² ~ 0.935). Mô hình "bắt" được các điểm giá trị cao và các mối quan hệ phức tạp mà Linear Regression bỏ sót.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h5 class="sub-header text-warning">C. Nhóm KNN & SVR</h5>
+        <div class="row g-3">
+            <div class="col-md-4"><div class="custom-card card p-1"><div class="chart-frame h-sm"><img src="KNN_5.png"></div><p class="chart-desc text-center small">KNN (k=5): Rất tốt (R² ~0.93), nhưng nhạy cảm nhiễu.</p></div></div>
+            <div class="col-md-4"><div class="custom-card card p-1"><div class="chart-frame h-sm"><img src="KNN_10.png"></div><p class="chart-desc text-center small">KNN (k=10): Độ chính xác giảm nhẹ.</p></div></div>
+            <div class="col-md-4"><div class="custom-card card p-1"><div class="chart-frame h-sm"><img src="KNN_50.png"></div><p class="chart-desc text-center small">KNN (k=50): Quá mượt, mất chi tiết (Underfitting).</p></div></div>
+            
+            <div class="col-md-4"><div class="custom-card card p-1"><div class="chart-frame h-sm"><img src="SVR200.png"></div><p class="chart-desc text-center small">SVR (C=200): Kém, chưa khớp dữ liệu.</p></div></div>
+            <div class="col-md-4"><div class="custom-card card p-1"><div class="chart-frame h-sm"><img src="SVR5000.png"></div><p class="chart-desc text-center small">SVR (C=5000): Bắt đầu cải thiện rõ rệt.</p></div></div>
+            <div class="col-md-4"><div class="custom-card card p-1"><div class="chart-frame h-sm"><img src="SVR10000.png"></div><p class="chart-desc text-center small">SVR (C=10000): Rất tốt (R² ~0.92), ngang ngửa KNN.</p></div></div>
+        </div>
+
+       <h2 class="section-header"><i class="fas fa-table me-2"></i>5. Bảng Tổng Hợp Kết Quả</h2>
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="table-responsive">
+                    <table class="table table-custom table-hover table-bordered text-center align-middle">
+                        <thead>
+                            <tr>
+                                <th class="text-start ps-4">Mô Hình</th>
+                                <th>Train MSE</th>
+                                <th>Train R²</th>
+                                <th>Test MSE</th>
+                                <th>Test R²</th>
+                                <th>Đánh giá</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td class="text-start ps-4">Linear Regression</td><td>4.58e+07</td><td>0.818</td><td>4.90e+07</td><td>0.806</td><td>Trung bình</td></tr>
+                            <tr><td class="text-start ps-4">Lasso Regression</td><td>4.58e+07</td><td>0.818</td><td>4.90e+07</td><td>0.806</td><td>Trung bình</td></tr>
+                            <tr><td class="text-start ps-4">SVR (C=200)</td><td>5.07e+07</td><td>0.799</td><td>5.39e+07</td><td>0.787</td><td>Kém</td></tr>
+                            <tr><td class="text-start ps-4">SVR (C=5000)</td><td>1.87e+07</td><td>0.925</td><td>2.16e+07</td><td>0.914</td><td>Khá</td></tr>
+                            <tr><td class="text-start ps-4">SVR (C=10000)</td><td>1.61e+07</td><td>0.936</td><td>1.90e+07</td><td>0.924</td><td>Tốt</td></tr>
+                            <tr><td class="text-start ps-4">KNN (k=5)</td><td>1.18e+07</td><td>0.953</td><td>1.78e+07</td><td>0.929</td><td>Tốt</td></tr>
+                            <tr><td class="text-start ps-4">KNN (k=10)</td><td>1.82e+07</td><td>0.927</td><td>2.23e+07</td><td>0.911</td><td>Khá</td></tr>
+                            <tr><td class="text-start ps-4">KNN (k=50)</td><td>3.49e+07</td><td>0.861</td><td>3.65e+07</td><td>0.856</td><td>Trung bình</td></tr>
+                            <tr><td class="text-start ps-4">Random Forest (n=50)</td><td>5.31e+06</td><td>0.978</td><td>1.66e+07</td><td>0.934</td><td>Xuất sắc</td></tr>
+                            <tr class="best-val">
+                                <td class="text-start ps-4"><i class="fas fa-check me-2"></i>Random Forest (n=100)</td>
+                                <td>5.23e+06</td>
+                                <td>0.979</td>
+                                <td>1.64e+07</td>
+                                <td>0.935</td>
+                                <td>Xuất sắc</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+               <div class="custom-card card p-3 mt-4">
+                    <h6 class="fw-bold text-center text-secondary">So Sánh R² Score (Test Set)</h6>
+                    <div class="chart-frame h-md">
+                        <img src="sumary.png" onerror="this.parentElement.innerHTML='<span class=\'text-danger\'>Thiếu ảnh: comparison_chart.png</span>'">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-5">
+            <div class="col-12">
+                <div class="alert alert-success border-0 shadow p-4">
+                    <h4 class="alert-heading fw-bold"><i class="fas fa-clipboard-check me-2"></i>Kết Luận</h4>
+                    <p>Qua quá trình thực nghiệm, nhóm nhận thấy <strong>Random Forest</strong> là thuật toán phù hợp nhất cho bài toán dự đoán giá xe trên tập dữ liệu này.</p>
+                    <hr>
+                    <ul class="mb-0">
+                        <li><strong>Ưu điểm:</strong> Độ chính xác cao (R² ~ 0.935), không yêu cầu chuẩn hóa dữ liệu quá khắt khe, xử lý tốt các biến phân loại và mối quan hệ phi tuyến.</li>
+                        <li><strong>Lưu ý:</strong> Cần tinh chỉnh tham số (số cây, độ sâu) để tránh hiện tượng Overfitting nhẹ (Train 0.98 vs Test 0.93).</li>
+                        <li><strong>So sánh:</strong> Các mô hình tuyến tính (Linear/Lasso) cho kết quả thấp hơn đáng kể (~0.80), chứng tỏ mối quan hệ giữa thông số kỹ thuật và giá xe không đơn thuần là đường thẳng.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <footer class="text-center py-4 mt-5 bg-white border-top text-muted">
+        <small>&copy; 2024 Nhóm MLP2 - Báo cáo môn Học Máy (CO3117)</small>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
