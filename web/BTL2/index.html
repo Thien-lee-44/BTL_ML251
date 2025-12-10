@@ -114,7 +114,44 @@
                 </div>
             </div>
         </div>
-        <h2 class="section-header"><i class="fas fa-cogs me-2"></i>2. Quy Trình Xử Lý Dữ Liệu Chi Tiết</h2>
+         <h2 class="section-header"><i class="fas fa-chart-bar me-2"></i>2. Phân Tích Dữ Liệu (EDA)</h2>
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="custom-card card p-3">
+                    <h6 class="fw-bold text-center text-secondary">Phân bố chủ đề (Class Distribution)</h6>
+                    <div class="chart-box h-md">
+                        <img src="class.png" onerror="this.parentElement.innerHTML='<span class=\'text-danger\'>Thiếu ảnh class.png</span>'">
+                    </div>
+                    <p class="text-center small text-muted mt-2">Dữ liệu khá cân bằng giữa các lớp (Love, Nature...), ngoại trừ lớp "Relationships" có số lượng thấp nhất, có thể gây khó khăn cho việc học.</p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="custom-card card p-3">
+                    <h6 class="fw-bold text-center text-secondary">Đám mây từ (WordCloud)</h6>
+                    <div class="chart-box h-md">
+                        <img src="wordcloud.png" onerror="this.parentElement.innerHTML='<span class=\'text-danger\'>Thiếu ảnh wordcloud.png</span>'">
+                    </div>
+                    <p class="text-center small text-muted mt-2">Các từ khóa nổi bật: love, time, night, life, heart... cho thấy sự trùng lặp từ vựng lớn giữa các chủ đề (đặc biệt là Love và Relationships).</p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="custom-card card p-3">
+                    <h6 class="fw-bold text-center text-secondary">Tần Suất Từ (Word Frequency)</h6>
+                    <div class="chart-box h-md">
+                        <img src="word_frequency.png" onerror="this.parentElement.innerHTML='<span class=\'text-danger\'>Thiếu ảnh word_frequency.png</span>'">
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="custom-card card p-3">
+                    <h6 class="fw-bold text-center text-secondary">Phân Phối Độ Dài Từ</h6>
+                    <div class="chart-box h-md">
+                        <img src="word_distribution.png" onerror="this.parentElement.innerHTML='<span class=\'text-danger\'>Thiếu ảnh word_distribution.png</span>'">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <h2 class="section-header"><i class="fas fa-cogs me-2"></i>3. Quy Trình Xử Lý Dữ Liệu Chi Tiết</h2>
         <div class="row">
             <div class="col-12">
                 
@@ -166,43 +203,7 @@
             </div>
         </div>
 
-        <h2 class="section-header"><i class="fas fa-chart-bar me-2"></i>3. Phân Tích Dữ Liệu (EDA)</h2>
-        <div class="row g-4">
-            <div class="col-md-6">
-                <div class="custom-card card p-3">
-                    <h6 class="fw-bold text-center text-secondary">Phân bố chủ đề (Class Distribution)</h6>
-                    <div class="chart-box h-md">
-                        <img src="class.png" onerror="this.parentElement.innerHTML='<span class=\'text-danger\'>Thiếu ảnh class.png</span>'">
-                    </div>
-                    <p class="text-center small text-muted mt-2">Dữ liệu khá cân bằng giữa các lớp (Love, Nature...), ngoại trừ lớp "Relationships" có số lượng thấp nhất, có thể gây khó khăn cho việc học.</p>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="custom-card card p-3">
-                    <h6 class="fw-bold text-center text-secondary">Đám mây từ (WordCloud)</h6>
-                    <div class="chart-box h-md">
-                        <img src="wordcloud.png" onerror="this.parentElement.innerHTML='<span class=\'text-danger\'>Thiếu ảnh wordcloud.png</span>'">
-                    </div>
-                    <p class="text-center small text-muted mt-2">Các từ khóa nổi bật: love, time, night, life, heart... cho thấy sự trùng lặp từ vựng lớn giữa các chủ đề (đặc biệt là Love và Relationships).</p>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="custom-card card p-3">
-                    <h6 class="fw-bold text-center text-secondary">Tần Suất Từ (Word Frequency)</h6>
-                    <div class="chart-box h-md">
-                        <img src="word_frequency.png" onerror="this.parentElement.innerHTML='<span class=\'text-danger\'>Thiếu ảnh word_frequency.png</span>'">
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="custom-card card p-3">
-                    <h6 class="fw-bold text-center text-secondary">Phân Phối Độ Dài Từ</h6>
-                    <div class="chart-box h-md">
-                        <img src="word_distribution.png" onerror="this.parentElement.innerHTML='<span class=\'text-danger\'>Thiếu ảnh word_distribution.png</span>'">
-                    </div>
-                </div>
-            </div>
-        </div>
+       
 
         <h2 class="section-header"><i class="fas fa-table me-2"></i>4. Kết Quả: Phương Pháp TF-IDF</h2>
         <div class="row">
@@ -376,7 +377,7 @@
                         <strong><i class="fas fa-star me-2"></i></strong>
                         Mặc dù Accuracy tổng thể (0.50) không cao hơn Logistic Regression (0.55), nhưng BERT Fine-tuned đạt <strong>Recall cực cao (0.73) cho lớp "Relationships"</strong>.
                         <br><br>
-                        <em>Giải thích:</em> Lớp "Relationships" chứa nhiều ẩn dụ về mối quan hệ (gia đình, bạn bè) mà không có từ khóa cố định như Nature. TF-IDF thất bại ở đây (Recall ~0.43), nhưng cơ chế <strong>Attention</strong> của BERT giúp mô hình "hiểu" được ngữ cảnh sâu xa này.
+                        <em>Giải thích:</em> Lớp "Relationships" chứa nhiều ẩn dụ về mối quan hệ (gia đình, bạn bè) mà không có từ khóa cố định như Nature. TF-IDF thất bại ở đây (Recall 0.43), nhưng cơ chế <strong>Attention</strong> của BERT giúp mô hình "hiểu" được ngữ cảnh sâu xa này.
                     </div>
                 </div>
             </div>
@@ -391,56 +392,90 @@
             </div>
         </div>
 
-        <h2 class="section-header"><i class="fas fa-clipboard-check me-2"></i>7. Tổng Hợp</h2>
-        <div class="row">
-            <div class="col-12">
-                <div class="custom-card card p-0">
-                    <div class="table-responsive">
-                        <table class="table table-striped table-hover text-center align-middle mb-0">
-                            <thead class="table-dark">
-                                <tr>
-                                    <th class="py-3">Phương Pháp</th>
-                                    <th>Mô Hình</th>
-                                    <th>Accuracy</th>
-                                    <th>Đánh giá Chuyên Môn</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr class="table-success fw-bold">
-                                    <td>TF-IDF</td>
-                                    <td>Logistic Regression</td>
-                                    <td>0.55</td>
-                                    <td class="text-start ps-4">Mô hình tốt nhất về tổng thể. Đơn giản, hiệu quả với dữ liệu văn bản nhỏ và đặc trưng từ khóa rõ ràng.</td>
-                                </tr>
-                                <tr>
-                                    <td>BERT (Fine-tune)</td>
-                                    <td>BERT Base</td>
-                                    <td>0.50</td>
-                                    <td class="text-start ps-4">Khả năng hiểu ngữ nghĩa sâu sắc nhất. Rất tốt cho các lớp khó như "Relationships".</td>
-                                </tr>
-                                <tr>
-                                    <td>TF-IDF</td>
-                                    <td>SVM</td>
-                                    <td>0.50</td>
-                                    <td class="text-start ps-4">Hiệu quả ở mức khá, tương đương BERT nhưng chi phí tính toán thấp hơn.</td>
-                                </tr>
-                                <tr>
-                                    <td>TF-IDF</td>
-                                    <td>Naive Bayes</td>
-                                    <td>0.29</td>
-                                    <td class="text-start ps-4 text-danger">Không phù hợp với phân phối dữ liệu thưa của TF-IDF.</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                
-                <div class="alert alert-info mt-4">
-                    <strong><i class="fas fa-info-circle me-2"></i>Kết luận:</strong> 
-                    Kết quả cho thấy các mô hình thống kê đơn giản (Logistic Regression) vẫn rất mạnh mẽ với dữ liệu văn bản có quy mô vừa phải và chủ đề rõ ràng. Tuy nhiên, Deep Learning (BERT) mở ra khả năng hiểu ngữ nghĩa sâu sắc hơn cho các lớp dữ liệu khó và trừu tượng.
+        <div class="container pb-5">
+    
+    <div class="container pb-5">
+    
+    <h2 class="section-header"><i class="fas fa-clipboard-check me-2"></i>7. TỔNG HỢP & KẾT LUẬN</h2>
+    <div class="row">
+        <div class="col-12">
+            <div class="custom-card card p-0">
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover text-center align-middle mb-0">
+                        <thead class="table-dark">
+                            <tr>
+                                <th class="py-3">Phương Pháp</th>
+                                <th>Mô Hình</th>
+                                <th>Accuracy</th>
+                                <th>F1-Score (Weighted)</th>
+                                <th>Đánh giá Chuyên Môn</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="table-success fw-bold">
+                                <td>TF-IDF</td>
+                                <td>Logistic Regression</td>
+                                <td>0.55</td>
+                                <td>0.54</td>
+                                <td class="text-start ps-4">Mô hình tốt nhất về tổng thể. Đơn giản, hiệu quả với đặc trưng từ khóa rõ ràng.</td>
+                            </tr>
+                            <tr class="table-warning fw-bold">
+                                <td>BERT (Fine-tune)</td>
+                                <td>BERT Base</td>
+                                <td>0.50</td>
+                                <td>0.51</td>
+                                <td class="text-start ps-4">Khả năng hiểu ngữ nghĩa sâu sắc nhất. Rất tốt cho các lớp khó như "Relationships" (Recall 0.73).</td>
+                            </tr>
+                            <tr>
+                                <td>BERT (Feature Ext.)</td>
+                                <td>Logistic Regression</td>
+                                <td>0.51</td>
+                                <td>0.51</td>
+                                <td class="text-start ps-4">Hiệu suất ổn định nhưng không vượt trội TF-IDF. Mặc dù là BERT, kết quả chưa bùng nổ khi chỉ trích xuất đặc trưng.</td>
+                            </tr>
+                            <tr>
+                                <td>TF-IDF</td>
+                                <td>SVM</td>
+                                <td>0.50</td>
+                                <td>0.50</td>
+                                <td class="text-start ps-4">Hiệu quả ở mức khá, ngang bằng BERT khi trích xuất đặc trưng.</td>
+                            </tr>
+                            <tr>
+                                <td>BERT (Feature Ext.)</td>
+                                <td>SVM</td>
+                                <td>0.50</td>
+                                <td>0.50</td>
+                                <td class="text-start ps-4">Khả năng phân tách tuyến tính tốt trong không gian vector BERT.</td>
+                            </tr>
+                            <tr>
+                                <td>BERT (Feature Ext.)</td>
+                                <td>Naive Bayes</td>
+                                <td>0.39</td>
+                                <td>0.38</td>
+                                <td class="text-start ps-4">Tốt hơn TF-IDF NB, cho thấy vector BERT (dense) phù hợp hơn với NB so với TF-IDF (sparse).</td>
+                            </tr>
+                            <tr>
+                                <td>TF-IDF</td>
+                                <td>Naive Bayes</td>
+                                <td>0.29</td>
+                                <td>0.30</td>
+                                <td class="text-start ps-4 text-danger">Không phù hợp với phân phối dữ liệu thưa của TF-IDF.</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
+            
+            <div class="alert alert-info mt-4">
+                <strong><i class="fas fa-info-circle me-2"></i>Kết luận chung:</strong> 
+                <p class="mb-0">1. **TF-IDF vs BERT:** Mô hình TF-IDF + Logistic Regression đạt Accuracy cao nhất (0.55), cho thấy đối với tập dữ liệu thơ ca này, các từ khóa (keywords) vẫn là đặc trưng mạnh nhất.</p>
+                <p class="mb-0">2. **Thách thức:** Không có mô hình nào vượt trội hơn ngưỡng 55%, điều này phản ánh tính phi tuyến và sự giao thoa ngữ nghĩa cao trong thơ ca.</p>
+                <p class="mb-0">3. **Tiềm năng của BERT:** Phiên bản Fine-tune (nếu có) là nơi BERT thể hiện khả năng hiểu ngữ nghĩa vượt trội, đặc biệt là trong việc phân loại các lớp có ngữ nghĩa trừu tượng và khó như "Relationships".</p>
+            </div>
         </div>
+
+    </div>
+</div>
 
     </div>
 

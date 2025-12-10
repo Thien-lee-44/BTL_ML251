@@ -111,7 +111,38 @@
             </div>
         </div>
 
-        <h2 class="section-title"><i class="fas fa-cogs me-2"></i>2. Phương Pháp & Mô Hình Trích Xuất</h2>
+         <h2 class="section-title"><i class="fas fa-chart-pie me-2"></i>2. Phân Tích Khám Phá Dữ Liệu (EDA)</h2>
+        
+        <h5 class="sub-title">A. Đặc Trưng Màu Sắc Trung Bình (Mean Color Distribution)</h5>
+        <p class="text-muted mb-3">Biểu đồ Histogram màu sắc (RGB) trung bình của từng lớp giúp nhận diện đặc trưng thị giác. Ví dụ: <em>Sandstorm</em> sẽ lệch về kênh Đỏ/Lục (tạo màu vàng cam), trong khi <em>Snow</em> sẽ có giá trị cao ở cả 3 kênh (màu trắng).</p>
+        
+        <div class="row g-2 mb-4">
+            <div class="col-md-2 col-4"><div class="custom-card card p-1"><div class="chart-frame h-sm"><img src="color_dist_dew.png" onerror="this.src='https://via.placeholder.com/150?text=No+Image'"></div><p class="text-center small mb-0 fw-bold">Dew</p></div></div>
+            <div class="col-md-2 col-4"><div class="custom-card card p-1"><div class="chart-frame h-sm"><img src="color_dist_fog.png" onerror="this.src='https://via.placeholder.com/150?text=No+Image'"></div><p class="text-center small mb-0 fw-bold">Fog</p></div></div>
+            <div class="col-md-2 col-4"><div class="custom-card card p-1"><div class="chart-frame h-sm"><img src="color_dist_frost.png" onerror="this.src='https://via.placeholder.com/150?text=No+Image'"></div><p class="text-center small mb-0 fw-bold">Frost</p></div></div>
+            <div class="col-md-2 col-4"><div class="custom-card card p-1"><div class="chart-frame h-sm"><img src="color_dist_glaze.png" onerror="this.src='https://via.placeholder.com/150?text=No+Image'"></div><p class="text-center small mb-0 fw-bold">Glaze</p></div></div>
+            <div class="col-md-2 col-4"><div class="custom-card card p-1"><div class="chart-frame h-sm"><img src="color_dist_hail.png" onerror="this.src='https://via.placeholder.com/150?text=No+Image'"></div><p class="text-center small mb-0 fw-bold">Hail</p></div></div>
+            <div class="col-md-2 col-4"><div class="custom-card card p-1"><div class="chart-frame h-sm"><img src="color_dist_lightning.png" onerror="this.src='https://via.placeholder.com/150?text=No+Image'"></div><p class="text-center small mb-0 fw-bold">Lightning</p></div></div>
+            <div class="col-md-2 col-4"><div class="custom-card card p-1"><div class="chart-frame h-sm"><img src="color_dist_rain.png" onerror="this.src='https://via.placeholder.com/150?text=No+Image'"></div><p class="text-center small mb-0 fw-bold">Rain</p></div></div>
+            <div class="col-md-2 col-4"><div class="custom-card card p-1"><div class="chart-frame h-sm"><img src="color_dist_rainbow.png" onerror="this.src='https://via.placeholder.com/150?text=No+Image'"></div><p class="text-center small mb-0 fw-bold">Rainbow</p></div></div>
+            <div class="col-md-2 col-4"><div class="custom-card card p-1"><div class="chart-frame h-sm"><img src="color_dist_rime.png" onerror="this.src='https://via.placeholder.com/150?text=No+Image'"></div><p class="text-center small mb-0 fw-bold">Rime</p></div></div>
+            <div class="col-md-2 col-4"><div class="custom-card card p-1"><div class="chart-frame h-sm"><img src="color_dist_sandstorm.png" onerror="this.src='https://via.placeholder.com/150?text=No+Image'"></div><p class="text-center small mb-0 fw-bold">Sandstorm</p></div></div>
+            <div class="col-md-2 col-4"><div class="custom-card card p-1"><div class="chart-frame h-sm"><img src="color_dist_snow.png" onerror="this.src='https://via.placeholder.com/150?text=No+Image'"></div><p class="text-center small mb-0 fw-bold">Snow</p></div></div>
+        </div>
+
+        <h5 class="sub-title">B. Phân Tích Độ Phân Giải Ảnh (Image Resolution)</h5>
+        <div class="row mb-5">
+            <div class="col-lg-8 offset-lg-2">
+                <div class="custom-card card p-3">
+                    <div class="chart-frame h-md" style="border: none;">
+                        <img src="image_resolution.png" onerror="this.parentElement.innerHTML='<div class=\'text-center text-danger py-5\'>Thiếu ảnh: image_resolution.png</div>'">
+                    </div>
+                    <p class="text-center small text-muted mt-2">Phân bố kích thước ảnh giúp xác định chiến lược Resize/Crop khi tiền xử lý.</p>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="section-title"><i class="fas fa-cogs me-2"></i>3. Phương Pháp & Mô Hình Trích Xuất</h2>
         <p class="text-muted mb-4">
             Nhóm áp dụng kỹ thuật <strong>Transfer Learning (Feature Extraction)</strong>: Thay vì huấn luyện mô hình từ đầu (tốn kém tài nguyên), nhóm sử dụng các mô hình SOTA (State-of-the-Art) đã được huấn luyện trên tập dữ liệu lớn (như ImageNet, LAION) để trích xuất vector đặc trưng, sau đó huấn luyện bộ phân loại nhẹ (Classifier) ở lớp cuối cùng.
         </p>
@@ -170,39 +201,100 @@
             </div>
         </div>
 
-        <h2 class="section-title"><i class="fas fa-chart-pie me-2"></i>3. Phân Tích Khám Phá Dữ Liệu (EDA)</h2>
-        
-        <h5 class="sub-title">A. Đặc Trưng Màu Sắc Trung Bình (Mean Color Distribution)</h5>
-        <p class="text-muted mb-3">Biểu đồ Histogram màu sắc (RGB) trung bình của từng lớp giúp nhận diện đặc trưng thị giác. Ví dụ: <em>Sandstorm</em> sẽ lệch về kênh Đỏ/Lục (tạo màu vàng cam), trong khi <em>Snow</em> sẽ có giá trị cao ở cả 3 kênh (màu trắng).</p>
-        
-        <div class="row g-2 mb-4">
-            <div class="col-md-2 col-4"><div class="custom-card card p-1"><div class="chart-frame h-sm"><img src="color_dist_dew.png" onerror="this.src='https://via.placeholder.com/150?text=No+Image'"></div><p class="text-center small mb-0 fw-bold">Dew</p></div></div>
-            <div class="col-md-2 col-4"><div class="custom-card card p-1"><div class="chart-frame h-sm"><img src="color_dist_fog.png" onerror="this.src='https://via.placeholder.com/150?text=No+Image'"></div><p class="text-center small mb-0 fw-bold">Fog</p></div></div>
-            <div class="col-md-2 col-4"><div class="custom-card card p-1"><div class="chart-frame h-sm"><img src="color_dist_frost.png" onerror="this.src='https://via.placeholder.com/150?text=No+Image'"></div><p class="text-center small mb-0 fw-bold">Frost</p></div></div>
-            <div class="col-md-2 col-4"><div class="custom-card card p-1"><div class="chart-frame h-sm"><img src="color_dist_glaze.png" onerror="this.src='https://via.placeholder.com/150?text=No+Image'"></div><p class="text-center small mb-0 fw-bold">Glaze</p></div></div>
-            <div class="col-md-2 col-4"><div class="custom-card card p-1"><div class="chart-frame h-sm"><img src="color_dist_hail.png" onerror="this.src='https://via.placeholder.com/150?text=No+Image'"></div><p class="text-center small mb-0 fw-bold">Hail</p></div></div>
-            <div class="col-md-2 col-4"><div class="custom-card card p-1"><div class="chart-frame h-sm"><img src="color_dist_lightning.png" onerror="this.src='https://via.placeholder.com/150?text=No+Image'"></div><p class="text-center small mb-0 fw-bold">Lightning</p></div></div>
-            <div class="col-md-2 col-4"><div class="custom-card card p-1"><div class="chart-frame h-sm"><img src="color_dist_rain.png" onerror="this.src='https://via.placeholder.com/150?text=No+Image'"></div><p class="text-center small mb-0 fw-bold">Rain</p></div></div>
-            <div class="col-md-2 col-4"><div class="custom-card card p-1"><div class="chart-frame h-sm"><img src="color_dist_rainbow.png" onerror="this.src='https://via.placeholder.com/150?text=No+Image'"></div><p class="text-center small mb-0 fw-bold">Rainbow</p></div></div>
-            <div class="col-md-2 col-4"><div class="custom-card card p-1"><div class="chart-frame h-sm"><img src="color_dist_rime.png" onerror="this.src='https://via.placeholder.com/150?text=No+Image'"></div><p class="text-center small mb-0 fw-bold">Rime</p></div></div>
-            <div class="col-md-2 col-4"><div class="custom-card card p-1"><div class="chart-frame h-sm"><img src="color_dist_sandstorm.png" onerror="this.src='https://via.placeholder.com/150?text=No+Image'"></div><p class="text-center small mb-0 fw-bold">Sandstorm</p></div></div>
-            <div class="col-md-2 col-4"><div class="custom-card card p-1"><div class="chart-frame h-sm"><img src="color_dist_snow.png" onerror="this.src='https://via.placeholder.com/150?text=No+Image'"></div><p class="text-center small mb-0 fw-bold">Snow</p></div></div>
-            <div class="col-md-2 col-4"><div class="custom-card card p-1 d-flex align-items-center justify-content-center bg-light text-muted small"><em>(Đang cập nhật)</em></div></div>
-        </div>
+       
+        <h2 class="section-title"><i class="fas fa-sliders-h me-2"></i>4. Quy Trình Tiền Xử Lý Dữ Liệu</h2>
+        <p class="text-muted mb-4">
+            Trước khi đưa vào mô hình, dữ liệu hình ảnh thô cần trải qua chuỗi xử lý nghiêm ngặt để đảm bảo tính nhất quán và phù hợp với yêu cầu đầu vào của từng kiến trúc mạng.
+        </p>
 
-        <h5 class="sub-title">B. Phân Tích Độ Phân Giải Ảnh (Image Resolution)</h5>
-        <div class="row mb-5">
-            <div class="col-lg-8 offset-lg-2">
-                <div class="custom-card card p-3">
-                    <div class="chart-frame h-md" style="border: none;">
-                        <img src="image_resolution.png" onerror="this.parentElement.innerHTML='<div class=\'text-center text-danger py-5\'>Thiếu ảnh: image_resolution.png</div>'">
+
+
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="custom-card card h-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px; font-weight: bold;">1</div>
+                            <h5 class="card-title mb-0 fw-bold text-dark">Đọc & Chuẩn Hóa Kênh Màu</h5>
+                        </div>
+                        <p class="card-text text-secondary">
+                            Dữ liệu ảnh được đọc thông qua thư viện <span class="badge-tech">OpenCV</span>.
+                        </p>
+                        <ul class="list-unstyled text-muted small">
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i><strong>Input:</strong> Ảnh thô từ thư mục dataset.</li>
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i><strong>Chuyển đổi hệ màu:</strong> OpenCV đọc mặc định là <code>BGR</code>, nhóm thực hiện chuyển đổi sang <code>RGB</code> để khớp với chuẩn huấn luyện của các model Deep Learning.</li>
+                        </ul>
                     </div>
-                    <p class="text-center small text-muted mt-2">Phân bố kích thước ảnh giúp xác định chiến lược Resize/Crop khi tiền xử lý.</p>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="custom-card card h-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px; font-weight: bold;">2</div>
+                            <h5 class="card-title mb-0 fw-bold text-dark">Resize & Biến Đổi Theo Model</h5>
+                        </div>
+                        <p class="card-text text-secondary">
+                            Áp dụng chiến lược xử lý riêng biệt cho từng loại kiến trúc:
+                        </p>
+                        <div class="alert alert-light border small p-2">
+                            <strong><i class="fas fa-cog me-1"></i>EfficientNet:</strong> Resize thủ công về kích thước <code>300x300</code> pixel và ép kiểu <code>float32</code>.
+                        </div>
+                        <div class="alert alert-light border small p-2 mb-0">
+                            <strong><i class="fas fa-robot me-1"></i>Transformers (DINOv2/Swin):</strong> Sử dụng <code>AutoImageProcessor</code> từ HuggingFace để tự động Resize (thường là <code>224x224</code>), Center Crop và chuẩn hóa theo Mean/Std của ImageNet.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="custom-card card h-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px; font-weight: bold;">3</div>
+                            <h5 class="card-title mb-0 fw-bold text-dark">Trích Xuất Vector Đặc Trưng</h5>
+                        </div>
+                        <p class="card-text text-secondary">
+                            Loại bỏ lớp phân loại (Fully Connected Layer) cuối cùng của các mô hình Pre-trained, chỉ giữ lại phần Backbone để trích xuất đặc trưng.
+                        </p>
+                        <ul class="list-unstyled text-muted small">
+                            <li><i class="fas fa-arrow-right text-primary me-2"></i>EfficientNet Output: Vector <code>(1536,)</code></li>
+                            <li><i class="fas fa-arrow-right text-primary me-2"></i>Swin Output: Vector <code>(768,)</code></li>
+                            <li><i class="fas fa-arrow-right text-primary me-2"></i>DINOv2/DeiT Output: Vector <code>(384,)</code></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="custom-card card h-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px; font-weight: bold;">4</div>
+                            <h5 class="card-title mb-0 fw-bold text-dark">Phân Chia Train / Test</h5>
+                        </div>
+                        <p class="card-text text-secondary">
+                            Sử dụng thư viện <span class="badge-tech">Scikit-learn</span> để chia tập dữ liệu vectors đặc trưng.
+                        </p>
+                        <div class="d-flex justify-content-between text-center mt-3">
+                            <div class="p-2 bg-light rounded flex-fill me-2 border">
+                                <div class="fw-bold text-primary">80%</div>
+                                <div class="small">Training Set</div>
+                            </div>
+                            <div class="p-2 bg-light rounded flex-fill border">
+                                <div class="fw-bold text-danger">20%</div>
+                                <div class="small">Testing Set</div>
+                            </div>
+                        </div>
+                        <div class="text-center mt-2 small text-muted fst-italic">
+                            *Random State = 42 (Đảm bảo tính tái lập)
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-
-        <h2 class="section-title"><i class="fas fa-chart-line me-2"></i>4. Kết Quả Thực Nghiệm & Đánh Giá</h2>
+        <h2 class="section-title"><i class="fas fa-chart-line me-2"></i>5. Kết Quả Thực Nghiệm & Đánh Giá</h2>
         
         <h5 class="sub-title">A. Bảng So Sánh Độ Chính Xác (Accuracy)</h5>
         <div class="row">
